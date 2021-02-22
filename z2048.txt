@@ -1,0 +1,49 @@
+app.tsx {
+
+	app => 
+
+	//====State====
+
+		const gameState: IGameState = State
+			
+		const game: IGame = new Game({ gameState, GameWrapeer })
+
+
+	// ====Handlers=====
+
+		startHandler: void => 
+			game.start();
+			
+		gridSizeHandler: void => 
+			setState(gridsize)
+
+		undoModeHandler: void => 
+			setState(undoMode)
+
+		stylesHandler: void
+			setState(styles)
+			
+
+	
+		return 
+		
+			<GridSizeOption click={gridSizeHandler} >		
+
+			<UndoModeOption click={undoModeHandler} > //
+			
+			<StylesOption click={stylesHandler} >
+
+			<StartBtn click={startHandler} game={game} >
+
+}
+
+
+GameWrapeer.tsx {
+	
+	GameWrapeer ({ game }) =>
+	
+		<Header>
+		<Options>
+		<Grid game={game} tile={Tile} >
+
+}

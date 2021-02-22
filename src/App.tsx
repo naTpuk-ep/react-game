@@ -1,50 +1,83 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
+import GameWrapper from './Components/GameWrapper';
+import { Grid, IStates, Size } from './interfaces';
+
+//blackMode
 
 const App: React.FC = () => {
 
-  const fieldSize: number = 4;
-  const cellSize: number = 50;
+  // // const [blackMode, setBlackMode] = useState<boolean>(false);
+  const [play, setPlay] = useState<boolean>(false);
+  const sizes: Size[] =	[4, 6, 8];
+	const [size, setSize] = useState<Size>(sizes[0]);
 
-  const field: Array<Array<number | null>> = [];
-
-  for (let i = 0; i < fieldSize; i++) {
-    field[i] = [];
-    for (let j = 0; j < fieldSize; j++) {
-      field[i].push(null);
+  const setStartState = (): IStates => {
+    const state: IStates = {};
+    if (localStorage.getItem('gameStates')) {
+      return JSON.parse(localStorage.getItem('gameStates')!); 
     }
+    sizes.forEach(size => {
+      Object.assign(state, {
+        [size]: {
+          gridSize: size,
+          undoMode: true,
+          gridState: setGrid()
+        }
+      })
+    })
+
+    return state;
   }
 
-  console.log(field);
-  
+  const setGrid = (): Grid => {
+    const grid: Grid = [];
+    for (let i = 0; i < size; i++){
+        grid[i] = [];
+        for (let j = 0; j < size; j++){
+            grid[i][j] = null;
+    }}
+    return grid;
+  }
+
+  const startState: IStates = setStartState();
+
+  const startHandler = () => {
+    setPlay(true);
+  }
+	
+  const nextSizeHandler = () => {
+		setSize(
+			sizes.indexOf(size) + 1 >= sizes.length
+			? sizes[0]
+			: sizes[sizes.indexOf(size) + 1]
+		)
+  }
+
+	const prevSizeHandler = () => {
+		setSize(
+			sizes.indexOf(size) === 0
+			? sizes[sizes.length - 1]
+			: sizes[sizes.indexOf(size) - 1]
+		)
+	}
+
   return (
     <>
-      <main>
-        <div className="game" style={{
-          width: `${cellSize*fieldSize}px`,
-          height: `${cellSize*fieldSize}px`,
-        }}>
-          {field.map((row, i) => {
-            return (
-              <div key={i} className="row">
-                {row.map((cell, j) => {
-                  const id=fieldSize*i+j
-                  return (
-                    <div key={j} id={`${id}`} className="cell" style={{
-                      left: `${cellSize*j}px`,
-                      top: `${cellSize*i}px`,
-                    }}>
-                      {id}
-                    </div>
-                  )
-                })}
-              </div>
-            )
-          })}
-        </div>
-      </main>
+      {
+        play ? 
+          <GameWrapper  gameState={startState[size]}/>
+        : 
+          <>
+            <button onClick={prevSizeHandler}>{'<'}</button>
+            <button onClick={nextSizeHandler}>{'>'}</button>
+            <button onClick={startHandler}>New Game</button>
+          </>
+      }
     </>
-  );
+  )
+
+
 }
 
 export default App;
