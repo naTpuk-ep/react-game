@@ -1,10 +1,13 @@
 import React from 'react'
+import { IMenuProps } from '../interfaces';
 
-const Menu = () => {
+const Menu:React.FC<IMenuProps> = ({ prevSizeHandler, nextSizeHandler, startHandler }: IMenuProps) => {
 	return (
-		<div>
-			
-		</div>
+		<>
+			<button onClick={prevSizeHandler}>{'<'}</button>
+			<button onClick={nextSizeHandler}>{'>'}</button>
+			<button onClick={startHandler}>New Game</button>
+		</>
 	)
 }
 

@@ -2,25 +2,43 @@ import Game from "./Game";
 
 export type Size = 4 | 6 | 8;
 
-export type Grid = Array<Array<number | null>>;
+export interface ICell {
+	x: number;
+	y: number;
+	value: number | undefined;
+	id?: number;
+}
+
+export type Grid = Array<Array<ICell>>;
 
 export interface IGameState {
-		gridSize: number,
-		undoMode: boolean, 
-		gridState: Grid,
+	size: number;
+	undoMode: boolean;
+	grid: Grid;
 }
 
 export interface IStates {
-	[key: number]: IGameState
+	[key: number]: IGameState;
 }
 
 export interface IStartBtnProps {
-	startHandler(): void
-	game: Game
+	startHandler(): void;
+	game: Game;
 }
 
 export interface IGameWrapperProps {
-	gameState: IGameState
+	gameState: IGameState;
+}
+
+export interface IMenuProps {
+	prevSizeHandler(): void;
+	nextSizeHandler(): void;
+	startHandler(): void;
+}
+
+export interface ICellProps extends ICell {
+	size: number;
+	key: number | undefined;
 }
 
 // export interface IGridSizeOptionProps {
