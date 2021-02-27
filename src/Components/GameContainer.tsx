@@ -4,8 +4,12 @@ import { IGameState, IGameWrapperProps } from "../interfaces";
 import Cell from "./Cell";
 
 const GameContainer: React.FC<IGameWrapperProps> = props => {
-	const { size, undoMode, grid } = props.gameState;
+
+	console.log(props.gameState.grid);
+	
+
 	const [gameState, setGameState] = useState<IGameState>(props.gameState);
+	const { size, undoMode, grid } = gameState;
 	const game = new Game(gameState, setGameState);
 	game.init();
 

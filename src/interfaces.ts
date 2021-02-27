@@ -38,7 +38,6 @@ export interface IMenuProps {
 
 export interface ICellProps extends ICell {
 	size: number;
-	key: number | undefined;
 }
 
 // export interface IGridSizeOptionProps {
