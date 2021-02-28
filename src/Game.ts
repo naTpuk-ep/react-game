@@ -141,7 +141,11 @@ export default class Game {
 				matrix[currRow][x]!.state = CellStates.MOVING;
 				matrix[currRow][x] = null;
 				currRow = nextRow;
-			} else if (matrix[nextRow][x]!.value === matrix[currRow][x]!.value) {
+			} else if (
+				matrix[nextRow][x]!.value === matrix[currRow][x]!.value &&
+				(matrix[nextRow][x]!.state === CellStates.IDLE ||
+					matrix[nextRow][x]!.state === CellStates.MOVING)
+			) {
 				matrix[nextRow][x]!.state = CellStates.DYING;
 				matrix[nextRow][x]!.by = matrix[currRow][x]!;
 				matrix[currRow][x]!.state = CellStates.INCREASE;
