@@ -1,15 +1,21 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import Game from "../Game";
 import { IGameState, IGameWrapperProps } from "../interfaces";
 import Cell from "./Cell";
 
 const GameContainer: React.FC<IGameWrapperProps> = props => {
 
-	console.log(props.gameState.grid);
+	console.log(props.gameState.cells);
 	
 
 	const [gameState, setGameState] = useState<IGameState>(props.gameState);
-	const { size, undoMode, grid } = gameState;
+	const { size, undoMode, cells } = gameState;
 	const game = new Game(gameState, setGameState);
 	game.init();
 
@@ -35,7 +41,8 @@ const GameContainer: React.FC<IGameWrapperProps> = props => {
 	useKey("ArrowUp", game.up);
 	useKey("ArrowDown", game.down);
 
-	const cellSize: number = 50;
+	const cellSize: number = 100;
+	const border: number = 5;
 	return (
 		<div className={"game-wrapper"}>
 			<div className="score"></div>
@@ -43,15 +50,35 @@ const GameContainer: React.FC<IGameWrapperProps> = props => {
 			<div
 				className="game"
 				style={{
-					width: `${cellSize * size}px`,
-					height: `${cellSize * size}px`,
+					width: `${cellSize * size + (size + 1) * border * 2}px`,
+					height: `${cellSize * size + (size + 1) * border * 2}px`,
 				}}
 			>
-				{grid.map(row =>
-					row.map(({ x, y, value, id }) => (
-						<Cell x={x} y={y} value={value} key={id} size={cellSize} />
-					))
-				)}
+				<div className="game__background">
+					{Array.from(new Array(size ** 2), (_, i) => i).map((_, i) => {
+						return (
+							<div
+								style={{
+									height: `${cellSize}px`,
+									width: `${cellSize}px`,
+								}}
+								className="game__cell"
+								key={i}
+							></div>
+						);
+					})}
+				</div>
+				<div className="game__background playground">
+					{cells.map(cell => (
+						<Cell
+							x={cell.x}
+							y={cell.y}
+							value={cell.value}
+							key={cell.id}
+							size={cellSize}
+						/>
+					))}
+				</div>
 			</div>
 		</div>
 	);

@@ -9,17 +9,15 @@ export interface ICell {
 	id?: number;
 }
 
-export type Grid = Array<Array<ICell>>;
+export type Matrix = Array<Array<ICell | null>>;
 
 export interface IGameState {
 	size: number;
 	undoMode: boolean;
-	grid: Grid;
+	cells: ICell[];
 }
 
-export interface IStates {
-	[key: number]: IGameState;
-}
+export type IStates = Array<IGameState>;
 
 export interface IStartBtnProps {
 	startHandler(): void;

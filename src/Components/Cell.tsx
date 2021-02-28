@@ -4,11 +4,15 @@ import { ICellProps } from "../interfaces";
 const Cell: React.FC<ICellProps> = ({ x, y, id, value, size }: ICellProps) => {
 	return (
 		<div
-			className="cell"
+			className="game__cell play-cell"
 			id={id?.toString()}
 			style={{
-				left: `${size * x}px`,
-				top: `${size * y}px`,
+				height: `${size}px`,
+				width: `${size}px`,
+				// left: `${(size + 10) * x + border}px`,
+				// top: `${(size + 10) * y + border}px`,
+				lineHeight: `${size}px`,
+				transform: `translate(${x * (size + 10)}px, ${y * (size + 10)}px)`,
 			}}
 		>
 			{value}

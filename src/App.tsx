@@ -12,8 +12,9 @@ const App: React.FC = () => {
 	// // const [blackMode, setBlackMode] = useState<boolean>(false);
 	const [play, setPlay] = useState<boolean>(false);
 	const [size, setSize] = useState<Size>(sizes[0]);
+	
 
-	const startState: IStates = useMemo(() => initState(size), [size]);
+	const startState: IStates = useMemo(() => initState(), []);
 
 	const startHandler = (): void => {
 		setPlay(true);
@@ -35,18 +36,24 @@ const App: React.FC = () => {
 		);
 	};
 
-	console.log(startState[size].grid);
+	// const undoModeHandler = (): void => {
+
+	// };
+
+	const gameState = startState[sizes.indexOf(size)];
 
 	return (
 		<>
-			{play
-				? <GameContainer gameState={startState[size]} />
-				: <Menu
+			{play ? (
+				<GameContainer gameState={gameState} />
+			) : (
+				<Menu
 					prevSizeHandler={prevSizeHandler}
 					nextSizeHandler={nextSizeHandler}
 					startHandler={startHandler}
+					// undoModeHandler={undoModeHandler}
 				/>
-			}
+			)}
 		</>
 	);
 };
