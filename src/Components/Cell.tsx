@@ -1,11 +1,11 @@
 import React from "react";
 import { ICellProps } from "../interfaces";
 
-const Cell: React.FC<ICellProps> = ({ x, y, id, value, size }: ICellProps) => {
+const Cell: React.FC<ICellProps> = ({ x, y, value, size }: ICellProps) => {
 	return (
 		<div
 			className="game__cell play-cell"
-			id={id?.toString()}
+			// id={id?.toString()}
 			style={{
 				height: `${size}px`,
 				width: `${size}px`,

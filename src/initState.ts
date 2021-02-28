@@ -1,5 +1,27 @@
 import { sizes } from "./constants";
-import { ICell, IStates, Size } from "./interfaces";
+import { CellStates, ICell, IStates, Size } from "./interfaces";
+
+export const setDifferentCell = (cells: ICell[], size: Size): ICell => {
+	const diffCell = setCell(getRandomCoord(size), getRandomCoord(size));
+	if (cells.some(cell => diffCell.x === cell.x && diffCell.y === cell.y)) {
+		return setDifferentCell(cells, size);
+	}
+	return diffCell;
+};
+
+const getValue = () => 2;
+
+export const getRandomCoord = (size: Size): number => Math.floor(Math.random() * size);
+
+export const setCell = (x: number, y: number): ICell => {
+	return {
+		x,
+		y,
+		value: getValue(),
+		id: Date.now(),
+		state: CellStates.IDLE,
+	};
+};
 
 export const initState = () => {
 	
@@ -7,33 +29,15 @@ export const initState = () => {
 		return JSON.parse(localStorage.getItem("2048")!);
 	}
 
-	const getRandomCoord = (size: Size): number => Math.floor(Math.random() * size);
-	const value = 2;
-
-	const setCell = (x: number, y: number, value: number): ICell => {
-		return {
-			x,
-			y,
-			value,
-			id: Date.now()
-		};
-	};
-
 	const initCells = (size: Size): ICell[] => {
-		
-		const cell1: ICell = setCell(getRandomCoord(size), getRandomCoord(size), value);
-		const cell2: ICell = setDifferentCell(cell1, size);
+		const cell1: ICell = setCell(
+			getRandomCoord(size),
+			getRandomCoord(size),
+		);
+		const cell2: ICell = setDifferentCell([cell1], size);
 		cell2.id! += 1;
 
 		return [cell1, cell2];
-	};
-
-	const setDifferentCell = (cell: ICell, size: Size): ICell => {
-		const diffCell = setCell(getRandomCoord(size), getRandomCoord(size), value);
-		if (diffCell.x === cell.x && diffCell.y === cell.y) {
-			return setDifferentCell(cell, size);
-		}
-		return diffCell;
 	};
 
 	// const cell1 = setCell();
