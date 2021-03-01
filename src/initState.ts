@@ -24,42 +24,30 @@ export const setCell = (x: number, y: number): ICell => {
 };
 
 export const initState = () => {
-	
 	if (localStorage.getItem("2048")) {
-		return JSON.parse(localStorage.getItem("2048")!);
+		console.log("init from local", JSON.parse(localStorage.getItem("2048")!));
+		return JSON.parse(localStorage.getItem("2048")!);		
 	}
 
 	const initCells = (size: Size): ICell[] => {
-		const cell1: ICell = setCell(
-			getRandomCoord(size),
-			getRandomCoord(size),
-		);
+		const cell1: ICell = setCell(getRandomCoord(size), getRandomCoord(size));
 		const cell2: ICell = setDifferentCell([cell1], size);
 		cell2.id! += 1;
 
 		return [cell1, cell2];
 	};
 
-	// const cell1 = setCell();
-	// const cell2 = setDifferentCell(cell1);
-
-	// sizes.forEach(size => {
-	// 	Object.assign(state, {
-	// 		[size]: {
-	// 			size,
-	// 			undoMode: true,
-	// 			grid: setGrid(cell1, cell2, size),
-	// 		},
-	// 	});
-	// });
-
 	const state: IStates = sizes.map(size => {
 		return {
 			size,
 			undoMode: true,
 			cells: initCells(size),
+			score: 0,
+			highScore: 0,
 		};
-	});;
+	});
+
+	localStorage.setItem("2048", JSON.stringify(state));
 
 	return state;
 };

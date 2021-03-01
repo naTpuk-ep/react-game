@@ -1,30 +1,21 @@
-import { getRandomCoord, setCell, setDifferentCell } from "./initState";
+import { setDifferentCell } from "./initState";
 import { IGameState, ICell, Matrix, CellStates } from "./interfaces";
 
 export default class Game {
-	constructor(public gameState: IGameState, public setGameState: Function) {
+	constructor(
+		public gameState: IGameState,
+		public setGameState: Function // public saveGame: Function
+	) {
 		// Object.assign( this, gameState );
 		this.right = this.right.bind(this);
 		this.left = this.left.bind(this);
 		this.up = this.up.bind(this);
 		this.down = this.down.bind(this);
+		// console.log(this.gameState);
 	}
 
 	populateField(cells: ICell[]): ICell[] {
 		return [...cells, setDifferentCell(cells, this.gameState.size)];
-		// const occupiedCoords = new Set();
-		// cells.forEach(cell => {
-		// 	occupiedCoords.add(cell.x * this.gameState.size + cell.y)
-		// })
-		// if (occupiedCoords.size === 16) return;
-		// let x, y, startSize = occupiedCoords.size;
-		// do {
-		// 	x = getRandomCoord(this.gameState.size);
-		// 	y = getRandomCoord(this.gameState.size);
-		// 	const coord = x * this.gameState.size + y;
-		// 	occupiedCoords.add(coord);
-		// } while (startSize === occupiedCoords.size);
-		// return [...cells, setCell(x, y)]
 	}
 
 	removeAndIncreaseCells(cells: ICell[]): ICell[] {
@@ -33,6 +24,10 @@ export default class Game {
 			.map(cell => {
 				if (cell.state === CellStates.INCREASE) {
 					cell.value *= 2;
+					this.gameState.score += cell.value;
+					if (this.gameState.highScore < this.gameState.score) {
+						this.gameState.highScore = this.gameState.score;
+					}
 				}
 				cell.state = CellStates.IDLE;
 				return cell;
@@ -171,16 +166,16 @@ export default class Game {
 
 	async setState(direction: string) {
 		this.setGameState((state: IGameState) => ({
-			...state,
+			...this.gameState,
 			cells: this.moveCells(state.cells, direction),
 		}));
 		await this.delay(100);
 		this.setGameState((state: IGameState) => ({
-			...state,
+			...this.gameState,
 			cells: this.removeAndIncreaseCells(state.cells),
 		}));
 		this.setGameState((state: IGameState) => ({
-			...state,
+			...this.gameState,
 			cells: this.populateField(state.cells),
 		}));
 	}

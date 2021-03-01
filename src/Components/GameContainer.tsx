@@ -7,17 +7,16 @@ import React, {
 } from "react";
 import Game from "../Game";
 import { IGameState, IGameWrapperProps } from "../interfaces";
+import { saveGame } from "../saveGame";
 import Cell from "./Cell";
 
 const GameContainer: React.FC<IGameWrapperProps> = props => {
-
-	console.log(props.gameState.cells);
-	
-
 	const [gameState, setGameState] = useState<IGameState>(props.gameState);
-	const { size, undoMode, cells } = gameState;
+
+	const { size, undoMode, cells, score, highScore } = gameState;
 	const game = new Game(gameState, setGameState);
-	game.init();
+
+	saveGame(gameState);
 
 	const useKey = (key: string, callBack: Function): void => {
 		// const callBackRef: Function = useCallback<Function>(callBack, [callBack]);
@@ -45,7 +44,10 @@ const GameContainer: React.FC<IGameWrapperProps> = props => {
 	const border: number = 5;
 	return (
 		<div className={"game-wrapper"}>
-			<div className="score"></div>
+			<div className="score-wrapper">
+				<div className="score">{score}</div>
+				<div className="high-score">{highScore}</div>
+			</div>
 			<div className="additions"></div>
 			<div
 				className="game"

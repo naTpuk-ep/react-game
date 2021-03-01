@@ -24,6 +24,8 @@ export interface IGameState {
 	size: Size;
 	undoMode: boolean;
 	cells: ICell[];
+	score: number;
+	highScore: number;
 }
 
 export type IStates = Array<IGameState>;

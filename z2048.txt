@@ -1,49 +1,14 @@
-app.tsx {
-
-	app => 
-
-	//====State====
-
-		const gameState: IGameState = State
-			
-		const game: IGame = new Game({ gameState, GameWrapeer })
+очки
+сохранение в локал  -  доработать
+заново
+завершение
+выпадение 4
+верстка
 
 
-	// ====Handlers=====
-
-		startHandler: void => 
-			game.start();
-			
-		gridSizeHandler: void => 
-			setState(gridsize)
-
-		undoModeHandler: void => 
-			setState(undoMode)
-
-		stylesHandler: void
-			setState(styles)
-			
-
-	
-		return 
-		
-			<GridSizeOption click={gridSizeHandler} >		
-
-			<UndoModeOption click={undoModeHandler} > //
-			
-			<StylesOption click={stylesHandler} >
-
-			<StartBtn click={startHandler} game={game} >
-
-}
+звуки
+доделать механику
+возврат хода
 
 
-GameWrapeer.tsx {
-	
-	GameWrapeer ({ game }) =>
-	
-		<Header>
-		<Options>
-		<Grid game={game} tile={Tile} >
-
-}
+бэкэнд
