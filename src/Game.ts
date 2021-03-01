@@ -4,13 +4,11 @@ import { saveGame } from "./saveGame";
 
 export default class Game {
 	prevCells: ICell[];
-	allIDLE: boolean;
 	constructor(
 		public gameState: IGameState,
 		public setGameState: Function,
 		public setCanMove: Function
 	) {
-		this.allIDLE = false;
 		this.prevCells = JSON.parse(localStorage.getItem("2048")!).find(
 			(game: IGameState) => game.size === this.gameState.size
 		).cells;
@@ -20,25 +18,59 @@ export default class Game {
 		this.down = this.down.bind(this);
 	}
 
-	finishGame() {
-		if (
-			this.gameState.cells.length === this.gameState.size ** 2 &&
-			JSON.stringify(this.gameState.cells) === JSON.stringify(this.prevCells) &&
-			this.allIDLE
-		) {
-			console.log("finish");
+	private finishGame() {
+		const { cells } = this.gameState;
+		const matrix = this.createMatrixFromCells(cells);
+		const canMove = () => {
+			if (cells.length === this.gameState.size ** 2) {
+				for (let y = 0; y < matrix.length; y++) {
+					for (let x = 0; x < matrix.length; x++) {
+						let prevX = x - 1;
+						let nextX = x + 1;
+						let nextY = y + 1;
+						let prevY = y - 1;
+						let value = matrix[y][x]?.value;
+						let checkValues: any[] = [];
+						for (let Yindex of [prevY, nextY]) {
+							for (let Xindex of [prevX, nextX]) {
+								if (
+									Xindex >= 0 &&
+									Xindex < matrix.length &&
+									Yindex >= 0 &&
+									Yindex < matrix.length
+								) {
+									checkValues.push(matrix[y][Xindex]?.value);
+									checkValues.push(matrix[Yindex][x]?.value);
+								}
+							}
+						}						
+						for (let checkValue of checkValues) {
+							if (value === checkValue) {
+								return true;
+							}
+						}
+					}
+				}
+				return false;
+			}
+			return true;
 		}
+		if (!canMove()) {
+			console.log('finish');
+		}
+
 	}
 
-	populateField(cells: ICell[]): ICell[] {
+	private populateField(cells: ICell[]): ICell[] {
 		if (JSON.stringify(cells) === JSON.stringify(this.prevCells)) {
 			return cells;
 		}
 		const newCells = [...cells, setDifferentCell(cells, this.gameState.size)];
+		this.gameState.cells = newCells;
 		return newCells;
 	}
 
-	removeAndIncreaseCells(cells: ICell[]): ICell[] {
+	private removeAndIncreaseCells(cells: ICell[]): ICell[] {
 		const newCells = cells
 			.filter(cell => cell.state !== CellStates.DYING)
 			.map(cell => {
@@ -56,7 +88,7 @@ export default class Game {
 		return newCells;
 	}
 
-	_rotateMatrix(matrix: any[][]) {
+	private _rotateMatrix(matrix: any[][]) {
 		matrix = matrix.reverse();
 		for (var i = 0; i < matrix.length; i++) {
 			for (var j = 0; j < i; j++) {
@@ -67,7 +99,7 @@ export default class Game {
 		}
 	}
 
-	rotateMatrixFromDirection(matrix: any[][], direction: string) {
+	private rotateMatrixFromDirection(matrix: any[][], direction: string) {
 		switch (direction) {
 			case "LEFT":
 				this._rotateMatrix(matrix);
@@ -86,7 +118,7 @@ export default class Game {
 		}
 	}
 
-	rotateMatrixToDirection(matrix: any[][], direction: string) {
+	private rotateMatrixToDirection(matrix: any[][], direction: string) {
 		switch (direction) {
 			case "RIGHT":
 				this._rotateMatrix(matrix);
@@ -105,20 +137,20 @@ export default class Game {
 		}
 	}
 
-	moveCells(initCells: ICell[], direction: string): ICell[] {
-		const cells: ICell[] = [...initCells];
-
-		if (cells.every(cell => cell.state === CellStates.IDLE)) {
-			this.allIDLE = true;
-		}
-
+	private createMatrixFromCells(cells: ICell[]): Matrix {
 		const matrix: Matrix = Array.from(new Array(this.gameState.size), () =>
 			Array.from(new Array(this.gameState.size), () => null)
 		);
-
 		cells.forEach(cell => {
 			matrix[cell.y][cell.x] = cell;
 		});
+		return matrix;
+	}
+
+	private moveCells(initCells: ICell[], direction: string): ICell[] {
+		const cells: ICell[] = [...initCells];
+
+		const matrix = this.createMatrixFromCells(cells);
 
 		this.rotateMatrixFromDirection(matrix, direction);
 
@@ -152,7 +184,7 @@ export default class Game {
 		return cells;
 	}
 
-	moveCell(matrix: Matrix, x: number, y: number): void {
+	private moveCell(matrix: Matrix, x: number, y: number): void {
 		let nextRow = y - 1;
 		let currRow = y;
 
@@ -183,9 +215,8 @@ export default class Game {
 	}
 
 	async setState(direction: string) {
-		
 		this.setCanMove(false);
-		
+
 		this.setGameState((state: IGameState) => {
 			return {
 				...this.gameState,
@@ -194,9 +225,9 @@ export default class Game {
 		});
 
 		await this.delay(100);
-		
+
 		this.setCanMove(true);
-		
+
 		this.setGameState((state: IGameState) => {
 			return {
 				...this.gameState,
@@ -206,7 +237,7 @@ export default class Game {
 		this.setGameState((state: IGameState) => {
 			const newState = {
 				...this.gameState,
-				cells: this.populateField(this.gameState.cells),
+				cells: this.populateField(state.cells),
 			};
 			saveGame(newState);
 			return newState;
