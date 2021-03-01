@@ -1,11 +1,6 @@
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Game from "../Game";
+import { initCells } from "../initState";
 import { IGameState, IGameWrapperProps } from "../interfaces";
 import { saveGame } from "../saveGame";
 import Cell from "./Cell";
@@ -13,7 +8,7 @@ import Cell from "./Cell";
 const GameContainer: React.FC<IGameWrapperProps> = props => {
 	const [gameState, setGameState] = useState<IGameState>(props.gameState);
 
-	const { size, undoMode, cells, score, highScore } = gameState;
+	const { size, cells, score, highScore } = gameState;
 	const game = new Game(gameState, setGameState);
 
 	saveGame(gameState);
@@ -40,15 +35,30 @@ const GameContainer: React.FC<IGameWrapperProps> = props => {
 	useKey("ArrowUp", game.up);
 	useKey("ArrowDown", game.down);
 
+	const replayHandler = () => {
+		setGameState(state => ({
+			...state,
+			score: 0,
+			cells: initCells(state.size),
+		}));
+	};
+
 	const cellSize: number = 100;
 	const border: number = 5;
 	return (
-		<div className={"game-wrapper"}>
+		<div className="game-wrapper">
 			<div className="score-wrapper">
 				<div className="score">{score}</div>
 				<div className="high-score">{highScore}</div>
 			</div>
-			<div className="additions"></div>
+			<nav className="additions">
+				<button onClick={props.exitHandler} className="back">
+					<i className="material-icons">exit_to_app</i>
+				</button>
+				<button onClick={replayHandler} className="replay">
+					<i className="material-icons">replay</i>
+				</button>
+			</nav>
 			<div
 				className="game"
 				style={{

@@ -181,26 +181,18 @@ export default class Game {
 	}
 
 	up(): void {
-		console.log("up");
-		// this.moveCells(this.gameState.cells, "UP");
 		this.setState("UP");
 	}
 
 	right(): void {
-		console.log("right");
-		// this.moveCells(this.gameState.cells, "RIGHT");
 		this.setState("RIGHT");
 	}
 
 	left(): void {
-		console.log("left");
-		// this.moveCells(this.gameState.cells, "LEFT");
 		this.setState("LEFT");
 	}
 
 	down(): void {
-		console.log("down");
-		// this.moveCells(this.gameState.cells, "DOWN");
 		this.setState("DOWN");
 	}
 }

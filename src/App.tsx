@@ -36,6 +36,11 @@ const App: React.FC = () => {
 		);
 	};
 
+	
+	const exitHandler = () => {
+		setPlay(false);
+	};
+
 	// const undoModeHandler = (): void => {
 
 	// };
@@ -45,7 +50,7 @@ const App: React.FC = () => {
 	return (
 		<>
 			{play ? (
-				<GameContainer gameState={gameState} />
+				<GameContainer gameState={gameState} exitHandler={exitHandler} />
 			) : (
 				<Menu
 					prevSizeHandler={prevSizeHandler}

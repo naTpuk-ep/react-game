@@ -37,6 +37,7 @@ export interface IStartBtnProps {
 
 export interface IGameWrapperProps {
 	gameState: IGameState;
+	exitHandler(): void;
 }
 
 export interface IMenuProps {
