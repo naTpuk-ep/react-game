@@ -9,7 +9,11 @@ export const setDifferentCell = (cells: ICell[], size: Size): ICell => {
 	return diffCell;
 };
 
-const getValue = () => 2;
+const getValue = () => {
+	const valuesArr = [2, 2, 2, 2, 2, 2, 2, 2, 2, 4];
+	const randomIndex = Math.floor(Math.random() * valuesArr.length);
+	return valuesArr[randomIndex];
+};
 
 export const getRandomCoord = (size: Size): number => Math.floor(Math.random() * size);
 

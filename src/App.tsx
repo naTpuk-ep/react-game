@@ -10,11 +10,10 @@ import { IStates, Size } from "./interfaces";
 
 const App: React.FC = () => {
 	// // const [blackMode, setBlackMode] = useState<boolean>(false);
+	const startState: IStates = initState();
+
 	const [play, setPlay] = useState<boolean>(false);
 	const [size, setSize] = useState<Size>(sizes[0]);
-	
-
-	const startState: IStates = useMemo(() => initState(), []);
 
 	const startHandler = (): void => {
 		setPlay(true);
@@ -36,7 +35,6 @@ const App: React.FC = () => {
 		);
 	};
 
-	
 	const exitHandler = () => {
 		setPlay(false);
 	};

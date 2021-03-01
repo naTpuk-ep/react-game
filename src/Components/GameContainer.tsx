@@ -7,11 +7,9 @@ import Cell from "./Cell";
 
 const GameContainer: React.FC<IGameWrapperProps> = props => {
 	const [gameState, setGameState] = useState<IGameState>(props.gameState);
-
+	const [canMove, setCanMove] = useState(true);
 	const { size, cells, score, highScore } = gameState;
-	const game = new Game(gameState, setGameState);
-
-	saveGame(gameState);
+	const game = useMemo(() => new Game(gameState, setGameState, setCanMove), [gameState]);
 
 	const useKey = (key: string, callBack: Function): void => {
 		// const callBackRef: Function = useCallback<Function>(callBack, [callBack]);
@@ -21,7 +19,7 @@ const GameContainer: React.FC<IGameWrapperProps> = props => {
 		// });
 		useEffect(() => {
 			const handler = (event: KeyboardEvent): void => {
-				if (event.key === key) {
+				if (event.key === key && canMove) {
 					callBack(event);
 				}
 			};
@@ -36,11 +34,15 @@ const GameContainer: React.FC<IGameWrapperProps> = props => {
 	useKey("ArrowDown", game.down);
 
 	const replayHandler = () => {
-		setGameState(state => ({
-			...state,
-			score: 0,
-			cells: initCells(state.size),
-		}));
+		setGameState(state => {
+			const newState = {
+				...state,
+				score: 0,
+				cells: initCells(state.size),
+			};
+			saveGame(newState);;;
+			return newState;
+		});
 	};
 
 	const cellSize: number = 100;

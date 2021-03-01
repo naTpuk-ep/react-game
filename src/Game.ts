@@ -1,25 +1,45 @@
 import { setDifferentCell } from "./initState";
 import { IGameState, ICell, Matrix, CellStates } from "./interfaces";
+import { saveGame } from "./saveGame";
 
 export default class Game {
+	prevCells: ICell[];
+	allIDLE: boolean;
 	constructor(
 		public gameState: IGameState,
-		public setGameState: Function // public saveGame: Function
+		public setGameState: Function,
+		public setCanMove: Function
 	) {
-		// Object.assign( this, gameState );
+		this.allIDLE = false;
+		this.prevCells = JSON.parse(localStorage.getItem("2048")!).find(
+			(game: IGameState) => game.size === this.gameState.size
+		).cells;
 		this.right = this.right.bind(this);
 		this.left = this.left.bind(this);
 		this.up = this.up.bind(this);
 		this.down = this.down.bind(this);
-		// console.log(this.gameState);
+	}
+
+	finishGame() {
+		if (
+			this.gameState.cells.length === this.gameState.size ** 2 &&
+			JSON.stringify(this.gameState.cells) === JSON.stringify(this.prevCells) &&
+			this.allIDLE
+		) {
+			console.log("finish");
+		}
 	}
 
 	populateField(cells: ICell[]): ICell[] {
-		return [...cells, setDifferentCell(cells, this.gameState.size)];
+		if (JSON.stringify(cells) === JSON.stringify(this.prevCells)) {
+			return cells;
+		}
+		const newCells = [...cells, setDifferentCell(cells, this.gameState.size)];
+		return newCells;
 	}
 
 	removeAndIncreaseCells(cells: ICell[]): ICell[] {
-		return cells
+		const newCells = cells
 			.filter(cell => cell.state !== CellStates.DYING)
 			.map(cell => {
 				if (cell.state === CellStates.INCREASE) {
@@ -32,6 +52,8 @@ export default class Game {
 				cell.state = CellStates.IDLE;
 				return cell;
 			});
+		this.gameState.cells = newCells;
+		return newCells;
 	}
 
 	_rotateMatrix(matrix: any[][]) {
@@ -85,6 +107,10 @@ export default class Game {
 
 	moveCells(initCells: ICell[], direction: string): ICell[] {
 		const cells: ICell[] = [...initCells];
+
+		if (cells.every(cell => cell.state === CellStates.IDLE)) {
+			this.allIDLE = true;
+		}
 
 		const matrix: Matrix = Array.from(new Array(this.gameState.size), () =>
 			Array.from(new Array(this.gameState.size), () => null)
@@ -152,32 +178,40 @@ export default class Game {
 		}
 	}
 
-	bindTriggers(): void {}
-
-	init(): void {}
-
-	start(): void {
-		console.log("start");
-	}
-
 	async delay(ms: number) {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
 	async setState(direction: string) {
-		this.setGameState((state: IGameState) => ({
-			...this.gameState,
-			cells: this.moveCells(state.cells, direction),
-		}));
+		
+		this.setCanMove(false);
+		
+		this.setGameState((state: IGameState) => {
+			return {
+				...this.gameState,
+				cells: this.moveCells(state.cells, direction),
+			};
+		});
+
 		await this.delay(100);
-		this.setGameState((state: IGameState) => ({
-			...this.gameState,
-			cells: this.removeAndIncreaseCells(state.cells),
-		}));
-		this.setGameState((state: IGameState) => ({
-			...this.gameState,
-			cells: this.populateField(state.cells),
-		}));
+		
+		this.setCanMove(true);
+		
+		this.setGameState((state: IGameState) => {
+			return {
+				...this.gameState,
+				cells: this.removeAndIncreaseCells(state.cells),
+			};
+		});
+		this.setGameState((state: IGameState) => {
+			const newState = {
+				...this.gameState,
+				cells: this.populateField(this.gameState.cells),
+			};
+			saveGame(newState);
+			return newState;
+		});
+		this.finishGame();
 	}
 
 	up(): void {
