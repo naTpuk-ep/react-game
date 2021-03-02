@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import "./App.scss";
-import GameContainer from "./Components/Container";
+import GameWrapper from "./Components/GameWrapper";
 import Menu from "./Components/Menu";
 import { sizes } from "./constants";
 import { initState } from "./initState";
@@ -46,18 +46,19 @@ const App: React.FC = () => {
 	const gameState = startState[sizes.indexOf(size)];
 
 	return (
-		<>
+		<div className="container">
 			{play ? (
-				<GameContainer gameState={gameState} exitHandler={exitHandler} />
+				<GameWrapper gameState={gameState} exitHandler={exitHandler} />
 			) : (
 				<Menu
 					prevSizeHandler={prevSizeHandler}
 					nextSizeHandler={nextSizeHandler}
 					startHandler={startHandler}
+					size={size}
 					// undoModeHandler={undoModeHandler}
 				/>
 			)}
-		</>
+		</div>
 	);
 };
 

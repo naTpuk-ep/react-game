@@ -1,5 +1,5 @@
-import { TargetElement } from "@testing-library/user-event";
 import React, { createRef, useEffect, useRef, useState } from "react";
+import { getValueStyle } from "../initState";
 import { CellStates, ICellProps } from "../interfaces";
 
 const Cell: React.FC<ICellProps> = ({
@@ -9,10 +9,7 @@ const Cell: React.FC<ICellProps> = ({
 	size,
 	border,
 	state,
-}: // onTransitionEnd,
-ICellProps) => {
-	// const valueRef = useRef<number>(value);
-
+}: ICellProps) => {
 	const [currValue, setCurrValue] = useState(value);
 	const [highLight, setHighLight] = useState(false);
 	const cellRef = createRef<HTMLDivElement>();
@@ -38,7 +35,6 @@ ICellProps) => {
 	useEffect(() => {
 		const onTransitionEnd = (event: TransitionEvent) => {
 			if (value !== currValue) {
-				console.log(value, currValue, state);
 				setCurrValue(value);
 			}
 		};
@@ -47,9 +43,9 @@ ICellProps) => {
 		return () => cell?.removeEventListener("transitionend", onTransitionEnd);
 	}, [cellRef, currValue, state, value]);
 
-	const className = `game__cell play-cell ${
+	const className = `${getValueStyle(value)} game__cell play-cell ${
 		state === CellStates.MOVING || state === CellStates.INCREASE ? "moving" : ""
-	} ${highLight ? "highlight" : ""} ${state === CellStates.NEW ? "new" : ""}`;
+	} ${highLight ? "highlight" : ""} ${state === CellStates.NEW ? "new" : ""} `;
 
 	return (
 		<div
@@ -61,7 +57,6 @@ ICellProps) => {
 				height: `${size}px`,
 				width: `${size}px`,
 				lineHeight: `${size}px`,
-				// transform: `translate(${x * (size + 10)}px, ${y * (size + 10)}px)`,
 				left: `${x * (size + 10) + border}px`,
 				top: `${y * (size + 10) + border}px`,
 			}}
@@ -72,7 +67,6 @@ ICellProps) => {
 };
 
 export default Cell;
-
 
 // button.addEventListener("click", e => {
 // 	animate(div, Math.random() * Math.PI * 2).then(() => alert("done"));

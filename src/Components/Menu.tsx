@@ -1,14 +1,27 @@
 import React from 'react'
 import { IMenuProps } from '../interfaces';
 
-const Menu:React.FC<IMenuProps> = ({ prevSizeHandler, nextSizeHandler, startHandler }: IMenuProps) => {
+const Menu: React.FC<IMenuProps> = ({
+	prevSizeHandler,
+	nextSizeHandler,
+	startHandler,
+	size,
+}: IMenuProps) => {
 	return (
-		<>
-			<button onClick={prevSizeHandler}>{'<'}</button>
-			<button onClick={nextSizeHandler}>{'>'}</button>
-			<button onClick={startHandler}>New Game</button>
-		</>
-	)
-}
+		<div className="menu">
+			<div className="menu-grid">
+				<div className={size === 4 ? "four-pic" : size === 6 ? "six-pic" : "eight-pic"} />
+			</div>
+			<nav className="size-nav">
+				<button onClick={prevSizeHandler}>{"<"}</button>
+				<span>{`${size}x${size}`}</span>
+				<button onClick={nextSizeHandler}>{">"}</button>
+			</nav>
+			<button className="menu-btn" onClick={startHandler}>
+				New Game
+			</button>
+		</div>
+	);
+};
 
 export default Menu

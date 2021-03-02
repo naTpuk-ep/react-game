@@ -33,7 +33,6 @@ const Grid: React.FC<IGridProps> = props => {
 					...game.state,
 				}));
 				game.finish();
-				await delay(100);
 				canMove.current = true;
 			}
 		};
@@ -42,13 +41,16 @@ const Grid: React.FC<IGridProps> = props => {
 	}, [game, setGameState]);
 
 	const cellSize: number = 100;
-	const border: number = 5;
+	const border: number = cellSize / 20;
 	return (
 		<div
 			className="game"
 			style={{
 				width: `${cellSize * size + (size + 1) * border * 2}px`,
 				height: `${cellSize * size + (size + 1) * border * 2}px`,
+				transform: `scale(${4 / size}) translate(${((100 * (4 - size))) / 8}%, ${
+					((100 * (4 - size))) / 8
+				}%)`,
 			}}
 		>
 			<div className="game__background">
@@ -66,7 +68,7 @@ const Grid: React.FC<IGridProps> = props => {
 				})}
 			</div>
 			<div className="game__background playground">
-				{cells.map(cell => (
+				{cells.map((cell) => (
 					<Cell
 						x={cell.x}
 						y={cell.y}

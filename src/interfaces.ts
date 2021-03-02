@@ -46,6 +46,7 @@ export interface IMenuProps {
 	prevSizeHandler(): void;
 	nextSizeHandler(): void;
 	startHandler(): void;
+	size: Size;
 }
 
 export interface ICellProps {

@@ -56,3 +56,32 @@ export const initState = () => {
 
 	return state;
 };
+
+export const getValueStyle = (value: number) => {
+	switch (value) {
+		case 2:
+			return "two";
+		case 4:
+			return "four";
+		case 8:
+			return "eight";
+		case 16:
+			return "sixteen";
+		case 32:
+			return "thirty";
+		case 64:
+			return "sixty";
+		case 128:
+			return "hundred";
+		case 256:
+			return "two-handred";
+		case 512:
+			return "five-hundred";
+		case 1024:
+			return "thousand";
+		case 2048:
+			return "two-thousands";
+		default:
+			return "black";
+	}
+};
