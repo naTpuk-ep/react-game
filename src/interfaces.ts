@@ -26,6 +26,7 @@ export interface IGameState {
 	cells: ICell[];
 	score: number;
 	highScore: number;
+	prevState: IGameState | null;
 }
 
 export type IStates = Array<IGameState>;
@@ -49,14 +50,17 @@ export interface IMenuProps {
 export interface ICellProps {
 	x: number;
 	y: number;
-	value: number | undefined;
+	value: number;
 	size: number;
+	onAnimationStart(): void;
 }
 
 export interface IGridProps {
-	size: Size;
-	cells: ICell[];
+	gameState: IGameState;
+	setGameState: Function;
 }
+
+export type Key = "ArrowLeft" | "ArrowDown" | "ArrowRight" | "ArrowUp";
 
 // export interface IGridSizeOptionProps {
 // 	gridSizeHandler(): void,

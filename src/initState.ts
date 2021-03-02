@@ -48,6 +48,7 @@ export const initState = () => {
 			cells: initCells(size),
 			score: 0,
 			highScore: 0,
+			prevState: null,
 		};
 	});
 

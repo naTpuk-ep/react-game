@@ -8,7 +8,6 @@ export const saveGame = (gameState: IGameState) => {
 		}
 		return state;
 	});
-	console.log("save");
 	
 	localStorage.setItem("2048", JSON.stringify(newStates));
 };
