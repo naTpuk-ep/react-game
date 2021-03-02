@@ -26,18 +26,20 @@ const GameContainer: React.FC<IGameWrapperProps> = props => {
 	};
 	return (
 		<div className="game-container">
-			<div className="score-wrapper">
-				<div className="score">{score}</div>
-				<div className="high-score">{highScore}</div>
-			</div>
-			<nav className="additions">
-				<button onClick={props.exitHandler} className="back">
-					<i className="material-icons">exit_to_app</i>
-				</button>
-				<button onClick={replayHandler} className="replay">
-					<i className="material-icons">replay</i>
-				</button>
-			</nav>
+			<header>
+				<div className="score-wrapper">
+					<div className="score">{score}</div>
+					<div className="high-score">{highScore}</div>
+				</div>
+				<nav className="additions">
+					<button onClick={props.exitHandler} className="back">
+						<i className="material-icons">exit_to_app</i>
+					</button>
+					<button onClick={replayHandler} className="replay">
+						<i className="material-icons">replay</i>
+					</button>
+				</nav>
+			</header>
 			<Grid gameState={gameState} setGameState={setGameState} />
 		</div>
 	);

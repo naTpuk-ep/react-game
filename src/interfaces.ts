@@ -7,6 +7,7 @@ export enum CellStates {
 	MOVING = "MOVING",
 	DYING = "DYING",
 	INCREASE = "INCREASE",
+	NEW = "NEW",
 }
 
 export interface ICell {
@@ -52,7 +53,8 @@ export interface ICellProps {
 	y: number;
 	value: number;
 	size: number;
-	onAnimationStart(): void;
+	border: number;
+	state: CellStates;
 }
 
 export interface IGridProps {

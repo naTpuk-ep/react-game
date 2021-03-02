@@ -23,7 +23,7 @@ export const setCell = (x: number, y: number): ICell => {
 		y,
 		value: getValue(),
 		id: Date.now(),
-		state: CellStates.IDLE,
+		state: CellStates.NEW,
 	};
 };
 

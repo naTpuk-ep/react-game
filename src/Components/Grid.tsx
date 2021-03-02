@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { Key, useEffect, useMemo, useRef, useState } from "react";
 import Game from "../Game";
 import { IGameState, IGridProps } from "../interfaces";
 import { saveGame } from "../saveGame";
@@ -10,11 +10,10 @@ const Grid: React.FC<IGridProps> = props => {
 	const canMove = useRef(true);
 	const { size } = gameState;
 	const game = useMemo(() => new Game(gameState, setCells), [gameState]);
+
 	const delay = async (ms: number) => {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	};
-
-	const onAnimationStart = () => {};
 
 	useEffect(() => {
 		setCells(gameState.cells);
@@ -28,13 +27,14 @@ const Grid: React.FC<IGridProps> = props => {
 				await delay(100);
 				setCells(game.removeAndIncreaseCells());
 				setCells(game.populateField());
-				canMove.current = true;
 				saveGame(game.state);
 				setGameState((state: IGameState) => ({
 					...state,
 					...game.state,
 				}));
 				game.finish();
+				await delay(100);
+				canMove.current = true;
 			}
 		};
 		document.addEventListener("keydown", handler);
@@ -68,12 +68,13 @@ const Grid: React.FC<IGridProps> = props => {
 			<div className="game__background playground">
 				{cells.map(cell => (
 					<Cell
-						onAnimationStart={onAnimationStart}
 						x={cell.x}
 						y={cell.y}
 						value={cell.value}
 						key={cell.id}
 						size={cellSize}
+						border={border}
+						state={cell.state}
 					/>
 				))}
 			</div>

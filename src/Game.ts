@@ -9,6 +9,9 @@ export default class Game {
 		this.prevCells = JSON.parse(localStorage.getItem("2048")!).find(
 			(game: IGameState) => game.size === this.state.size
 		).cells;
+		this.prevCells.forEach(cell => {
+			return (cell.state = CellStates.IDLE);
+		});
 	}
 
 	finish() {
@@ -55,6 +58,8 @@ export default class Game {
 
 	populateField(): ICell[] {
 		const cells = [...this.state.cells];
+		console.log(cells, this.prevCells);
+		
 		if (JSON.stringify(cells) === JSON.stringify(this.prevCells)) {
 			return cells;
 		}
@@ -83,7 +88,15 @@ export default class Game {
 
 	moveCells(key: Key): ICell[] {
 		const cells: ICell[] = [...this.state.cells];
-		// if (typeof key !== Key) return cells;
+		console.log(key);
+
+		if (
+			key !== "ArrowLeft" &&
+			key !== "ArrowDown" &&
+			key !== "ArrowRight" &&
+			key !== "ArrowUp"
+		)
+			return cells;
 		const matrix = this.createMatrixFromCells(cells);
 		this.rotateMatrixFromDirection(matrix, key);
 		for (let y = 0; y < this.state.size; y++) {
@@ -116,7 +129,6 @@ export default class Game {
 	private moveCell(matrix: Matrix, x: number, y: number): void {
 		let nextRow = y - 1;
 		let currRow = y;
-
 		while (nextRow >= 0) {
 			if (matrix[nextRow][x] === null) {
 				matrix[nextRow][x] = matrix[currRow][x];
