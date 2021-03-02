@@ -53,6 +53,11 @@ export interface ICellProps {
 	size: number;
 }
 
+export interface IGridProps {
+	size: Size;
+	cells: ICell[];
+}
+
 // export interface IGridSizeOptionProps {
 // 	gridSizeHandler(): void,
 // }

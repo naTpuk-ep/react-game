@@ -43,7 +43,7 @@ export default class Game {
 									checkValues.push(matrix[Yindex][x]?.value);
 								}
 							}
-						}						
+						}
 						for (let checkValue of checkValues) {
 							if (value === checkValue) {
 								return true;
@@ -54,11 +54,10 @@ export default class Game {
 				return false;
 			}
 			return true;
-		}
+		};
 		if (!canMove()) {
-			console.log('finish');
+			console.log("finish");
 		}
-
 	}
 
 	private populateField(cells: ICell[]): ICell[] {
@@ -101,14 +100,14 @@ export default class Game {
 
 	private rotateMatrixFromDirection(matrix: any[][], direction: string) {
 		switch (direction) {
-			case "LEFT":
+			case "Left":
 				this._rotateMatrix(matrix);
 				break;
-			case "DOWN":
+			case "Down":
 				this._rotateMatrix(matrix);
 				this._rotateMatrix(matrix);
 				break;
-			case "RIGHT":
+			case "Right":
 				this._rotateMatrix(matrix);
 				this._rotateMatrix(matrix);
 				this._rotateMatrix(matrix);
@@ -120,14 +119,14 @@ export default class Game {
 
 	private rotateMatrixToDirection(matrix: any[][], direction: string) {
 		switch (direction) {
-			case "RIGHT":
+			case "Right":
 				this._rotateMatrix(matrix);
 				break;
-			case "DOWN":
+			case "Down":
 				this._rotateMatrix(matrix);
 				this._rotateMatrix(matrix);
 				break;
-			case "LEFT":
+			case "Left":
 				this._rotateMatrix(matrix);
 				this._rotateMatrix(matrix);
 				this._rotateMatrix(matrix);
@@ -214,7 +213,7 @@ export default class Game {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
-	async setState(direction: string) {
+	async move(direction: string) {
 		this.setCanMove(false);
 
 		this.setGameState((state: IGameState) => {
@@ -246,19 +245,19 @@ export default class Game {
 	}
 
 	up(): void {
-		this.setState("UP");
+		this.move("Up");
 	}
 
 	right(): void {
-		this.setState("RIGHT");
+		this.move("Right");
 	}
 
 	left(): void {
-		this.setState("LEFT");
+		this.move("Left");
 	}
 
 	down(): void {
-		this.setState("DOWN");
+		this.move("Down");
 	}
 }
 

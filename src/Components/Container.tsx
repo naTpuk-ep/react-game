@@ -3,20 +3,17 @@ import Game from "../Game";
 import { initCells } from "../initState";
 import { IGameState, IGameWrapperProps } from "../interfaces";
 import { saveGame } from "../saveGame";
-import Cell from "./Cell";
+import Grid from "./Grid";
 
 const GameContainer: React.FC<IGameWrapperProps> = props => {
 	const [gameState, setGameState] = useState<IGameState>(props.gameState);
 	const [canMove, setCanMove] = useState(true);
 	const { size, cells, score, highScore } = gameState;
-	const game = useMemo(() => new Game(gameState, setGameState, setCanMove), [gameState]);
+	const game = useMemo(() => new Game(gameState, setGameState, setCanMove), [
+		gameState,
+	]);
 
 	const useKey = (key: string, callBack: Function): void => {
-		// const callBackRef: Function = useCallback<Function>(callBack, [callBack]);
-		// useEffect(() => {
-		// 	callBackRef.current = callBack;
-		// 	console.log("use1");
-		// });
 		useEffect(() => {
 			const handler = (event: KeyboardEvent): void => {
 				if (event.key === key && canMove) {
@@ -40,15 +37,12 @@ const GameContainer: React.FC<IGameWrapperProps> = props => {
 				score: 0,
 				cells: initCells(state.size),
 			};
-			saveGame(newState);;;
+			saveGame(newState);
 			return newState;
 		});
 	};
-
-	const cellSize: number = 100;
-	const border: number = 5;
 	return (
-		<div className="game-wrapper">
+		<div className="game-container">
 			<div className="score-wrapper">
 				<div className="score">{score}</div>
 				<div className="high-score">{highScore}</div>
@@ -61,39 +55,7 @@ const GameContainer: React.FC<IGameWrapperProps> = props => {
 					<i className="material-icons">replay</i>
 				</button>
 			</nav>
-			<div
-				className="game"
-				style={{
-					width: `${cellSize * size + (size + 1) * border * 2}px`,
-					height: `${cellSize * size + (size + 1) * border * 2}px`,
-				}}
-			>
-				<div className="game__background">
-					{Array.from(new Array(size ** 2), (_, i) => i).map((_, i) => {
-						return (
-							<div
-								style={{
-									height: `${cellSize}px`,
-									width: `${cellSize}px`,
-								}}
-								className="game__cell"
-								key={i}
-							></div>
-						);
-					})}
-				</div>
-				<div className="game__background playground">
-					{cells.map(cell => (
-						<Cell
-							x={cell.x}
-							y={cell.y}
-							value={cell.value}
-							key={cell.id}
-							size={cellSize}
-						/>
-					))}
-				</div>
-			</div>
+			<Grid size={size} cells={cells} />
 		</div>
 	);
 };

@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import "./App.scss";
-import GameContainer from "./Components/GameContainer";
+import GameContainer from "./Components/Container";
 import Menu from "./Components/Menu";
 import { sizes } from "./constants";
 import { initState } from "./initState";
