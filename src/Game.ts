@@ -51,15 +51,12 @@ export default class Game {
 			}
 			return true;
 		};
-		if (!canMove()) {
-			console.log("finish");
-		}
+		return !canMove();
 	}
 
 	populateField(): ICell[] {
 		const cells = [...this.state.cells];
-		console.log(cells, this.prevCells);
-		
+
 		if (JSON.stringify(cells) === JSON.stringify(this.prevCells)) {
 			return cells;
 		}
@@ -88,7 +85,6 @@ export default class Game {
 
 	moveCells(key: Key): ICell[] {
 		const cells: ICell[] = [...this.state.cells];
-		console.log(key);
 
 		if (
 			key !== "ArrowLeft" &&

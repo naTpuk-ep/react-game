@@ -2,6 +2,8 @@ import Game from "./Game";
 
 export type Size = 4 | 6 | 8;
 
+export type ModalType = "2048" | "gameover" | "never" | undefined;
+
 export enum CellStates {
 	IDLE = "IDLE",
 	MOVING = "MOVING",
@@ -61,10 +63,19 @@ export interface ICellProps {
 export interface IGridProps {
 	gameState: IGameState;
 	setGameState: Function;
+	replayHandler(): void;
+	exitHandler(): void;
 }
 
 export type Key = "ArrowLeft" | "ArrowDown" | "ArrowRight" | "ArrowUp";
 
+export interface ModalProps {
+	type: ModalType;
+	replayHandler(): void;
+	exitHandler(): void;
+	setModal: Function;
+	setCanMove: Function;
+}
 // export interface IGridSizeOptionProps {
 // 	gridSizeHandler(): void,
 // }

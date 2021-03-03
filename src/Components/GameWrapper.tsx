@@ -46,7 +46,12 @@ const GameWrapper: React.FC<IGameWrapperProps> = (props) => {
 					</button>
 				</nav>
 			</header>
-			<Grid gameState={gameState} setGameState={setGameState} />
+			<Grid
+				gameState={gameState}
+				setGameState={setGameState}
+				replayHandler={replayHandler}
+				exitHandler={props.exitHandler}
+			/>
 		</>
 	);
 };

@@ -10,7 +10,11 @@ const Menu: React.FC<IMenuProps> = ({
 	return (
 		<div className="menu">
 			<div className="menu-grid">
-				<div className={size === 4 ? "four-pic" : size === 6 ? "six-pic" : "eight-pic"} />
+				<div
+					className={
+						size === 4 ? "four-pic" : size === 6 ? "six-pic" : "eight-pic"
+					}
+				/>
 			</div>
 			<nav className="size-nav">
 				<button onClick={prevSizeHandler}>{"<"}</button>
@@ -18,7 +22,7 @@ const Menu: React.FC<IMenuProps> = ({
 				<button onClick={nextSizeHandler}>{">"}</button>
 			</nav>
 			<button className="menu-btn" onClick={startHandler}>
-				New Game
+				Start Game
 			</button>
 		</div>
 	);

@@ -31,6 +31,7 @@ header{
 
 .menu-grid{
 	height: 100%;
+	margin-top: 50px;
 	& div {
 		height: 100%;
 	}
@@ -275,4 +276,39 @@ h5{
 
 .black {
 	background-color: #3d3a33;
+}
+
+.modal {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	background-color: #f2b179;
+	opacity: 0.5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	background-color: #f2b179;
+	opacity: 0.8;
+	z-index: 3;
+	&__btns{
+		width: 450px;
+		display: flex;
+		justify-content: space-evenly;
+		&__btn{
+			background: none;
+  		font-size: 35px;
+			transition: color 0.2s ease-in-out;
+			color: #473829;
+			&:hover{
+				color: black;
+			}
+	}
+	}
 }
