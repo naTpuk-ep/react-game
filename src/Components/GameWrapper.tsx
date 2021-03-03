@@ -1,16 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import useSound from "use-sound";
 import Game from "../Game";
 import { initCells } from "../initState";
 import { IGameState, IGameWrapperProps } from "../interfaces";
 import { saveGame } from "../saveGame";
 import Grid from "./Grid";
+import swipeSound from "../sounds/swipe.mp3";
 
 const GameWrapper: React.FC<IGameWrapperProps> = (props) => {
 	const [gameState, setGameState] = useState<IGameState>(props.gameState);
 	const { score, highScore } = gameState;
+	const [volume, setVolume] = useState(0.25);
+
+	const [playSwipe] = useSound(swipeSound, { volume });
+
+	const volumeHandler = () => {
+		setVolume(volume === 0.25 ? 0.5 : volume === 0.5 ? 0 : 0.25);
+	};
 
 	const replayHandler = () => {
-		setGameState((state) => {
+		setGameState(state => {
 			const newState = {
 				...state,
 				score: 0,
@@ -38,12 +47,25 @@ const GameWrapper: React.FC<IGameWrapperProps> = (props) => {
 					</div>
 				</div>
 				<nav className="additions">
-					<button onClick={props.exitHandler} className="back header-item">
-						<i className="material-icons">exit_to_app</i>
-					</button>
-					<button onClick={replayHandler} className="replay header-item">
-						<i className="material-icons">replay</i>
-					</button>
+					<div className="additions__left">
+						<button onClick={props.exitHandler} className="back header-item">
+							<i className="material-icons">exit_to_app</i>
+						</button>
+						<button onClick={volumeHandler} className="back header-item">
+							<i className="material-icons">
+								{volume === 0
+									? "volume_mute"
+									: volume === 0.25
+									? "volume_down"
+									: "volume_up"}
+							</i>
+						</button>
+					</div>
+					<div className="additions__right">
+						<button onClick={replayHandler} className="replay header-item">
+							<i className="material-icons">replay</i>
+						</button>
+					</div>
 				</nav>
 			</header>
 			<Grid
@@ -51,6 +73,7 @@ const GameWrapper: React.FC<IGameWrapperProps> = (props) => {
 				setGameState={setGameState}
 				replayHandler={replayHandler}
 				exitHandler={props.exitHandler}
+				playSwipe={playSwipe}
 			/>
 		</>
 	);

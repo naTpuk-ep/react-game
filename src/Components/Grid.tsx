@@ -6,12 +6,22 @@ import Cell from "./Cell";
 import Modal from "./Modal";
 
 const Grid: React.FC<IGridProps> = props => {
-	const { gameState, setGameState, exitHandler, replayHandler } = props;
+	const {
+		gameState,
+		setGameState,
+		exitHandler,
+		replayHandler,
+		playSwipe,
+	} = props;
 	const [cells, setCells] = useState(gameState.cells);
 	const [canMove, setCanMove] = useState(true);
 	const { size } = gameState;
-	const game = useMemo(() => new Game(gameState, setCells), [gameState]);
+	const game = useMemo(() => new Game(gameState, setCells, playSwipe), [
+		gameState,
+		playSwipe,
+	]);
 	const [modal, setModal] = useState<ModalType>();
+	// const [isMoving, setIsMoving] = useState(false);
 
 	const delay = async (ms: number) => {
 		return new Promise(resolve => setTimeout(resolve, ms));
@@ -32,6 +42,9 @@ const Grid: React.FC<IGridProps> = props => {
 			if (canMove) {
 				setCanMove(false);
 				setCells(game.moveCells(event.key));
+				if (game.isMoving()) {
+					playSwipe();
+				}
 				await delay(100);
 				setCells(game.removeAndIncreaseCells());
 				setCells(game.populateField());
@@ -48,7 +61,7 @@ const Grid: React.FC<IGridProps> = props => {
 		};
 		document.addEventListener("keydown", handler);
 		return () => document.removeEventListener("keydown", handler);
-	}, [canMove, game, setGameState]);
+	}, [canMove, game, playSwipe, setGameState]);
 
 	const cellSize: number = 100;
 	const border: number = cellSize / 20;

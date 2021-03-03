@@ -5,13 +5,22 @@ import { saveGame } from "./saveGame";
 
 export default class Game {
 	prevCells: ICell[];
-	constructor(public state: IGameState, public setCells: Function) {
+	constructor(
+		public state: IGameState,
+		public setCells: Function,
+		public playSwipe: Function
+	) {
 		this.prevCells = JSON.parse(localStorage.getItem("2048")!).find(
 			(game: IGameState) => game.size === this.state.size
 		).cells;
 		this.prevCells.forEach(cell => {
 			return (cell.state = CellStates.IDLE);
 		});
+	}
+
+	isMoving() {
+		console.log(this.state.cells, this.prevCells);
+		return JSON.stringify(this.state.cells) !== JSON.stringify(this.prevCells);
 	}
 
 	finish() {
@@ -57,7 +66,7 @@ export default class Game {
 	populateField(): ICell[] {
 		const cells = [...this.state.cells];
 
-		if (JSON.stringify(cells) === JSON.stringify(this.prevCells)) {
+		if (!this.isMoving()) {
 			return cells;
 		}
 		const newCells = [...cells, setDifferentCell(cells, this.state.size)];

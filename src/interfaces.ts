@@ -65,6 +65,7 @@ export interface IGridProps {
 	setGameState: Function;
 	replayHandler(): void;
 	exitHandler(): void;
+	playSwipe: Function;
 }
 
 export type Key = "ArrowLeft" | "ArrowDown" | "ArrowRight" | "ArrowUp";
@@ -76,6 +77,3 @@ export interface ModalProps {
 	setModal: Function;
 	setCanMove: Function;
 }
-// export interface IGridSizeOptionProps {
-// 	gridSizeHandler(): void,
-// }
