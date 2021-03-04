@@ -1,26 +1,27 @@
 import { Key } from "react";
-import { setDifferentCell } from "./initState";
+import { getPrevState, setDifferentCell } from "./initState";
 import { IGameState, ICell, Matrix, CellStates } from "./interfaces";
-import { saveGame } from "./saveGame";
 
 export default class Game {
-	prevCells: ICell[];
-	constructor(
-		public state: IGameState,
-		public setCells: Function,
-		public playSwipe: Function
-	) {
-		this.prevCells = JSON.parse(localStorage.getItem("2048")!).find(
-			(game: IGameState) => game.size === this.state.size
-		).cells;
-		this.prevCells.forEach(cell => {
-			return (cell.state = CellStates.IDLE);
-		});
+	prevState: IGameState;
+	constructor(public state: IGameState) {
+		this.prevState = getPrevState(this.state.size);
+		this.state.prevState = {
+			...this.prevState,
+			prevState: null,
+		};;
 	}
 
 	isMoving() {
-		console.log(this.state.cells, this.prevCells);
-		return JSON.stringify(this.state.cells) !== JSON.stringify(this.prevCells);
+		const getXYCells = (cells: ICell[]) =>
+			cells.map(cell => ({
+				x: cell.x,
+				y: cell.y,
+			}));
+		return (
+			JSON.stringify(getXYCells(this.state.cells)) !==
+			JSON.stringify(getXYCells(this.prevState.cells))
+		);
 	}
 
 	finish() {
@@ -94,7 +95,6 @@ export default class Game {
 
 	moveCells(key: Key): ICell[] {
 		const cells: ICell[] = [...this.state.cells];
-
 		if (
 			key !== "ArrowLeft" &&
 			key !== "ArrowDown" &&
@@ -143,7 +143,8 @@ export default class Game {
 			} else if (
 				matrix[nextRow][x]!.value === matrix[currRow][x]!.value &&
 				(matrix[nextRow][x]!.state === CellStates.IDLE ||
-					matrix[nextRow][x]!.state === CellStates.MOVING)
+					matrix[nextRow][x]!.state === CellStates.MOVING ||
+					matrix[nextRow][x]!.state === CellStates.NEW)
 			) {
 				matrix[nextRow][x]!.state = CellStates.DYING;
 				matrix[nextRow][x]!.by = matrix[currRow][x]!;

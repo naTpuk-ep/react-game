@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import useSound from "use-sound";
-import Game from "../Game";
 import { initCells } from "../initState";
 import { IGameState, IGameWrapperProps } from "../interfaces";
 import { saveGame } from "../saveGame";
@@ -12,23 +11,32 @@ const GameWrapper: React.FC<IGameWrapperProps> = (props) => {
 	const { score, highScore } = gameState;
 	const [volume, setVolume] = useState(0.25);
 
+	saveGame(gameState);
+
 	const [playSwipe] = useSound(swipeSound, { volume });
 
 	const volumeHandler = () => {
 		setVolume(volume === 0.25 ? 0.5 : volume === 0.5 ? 0 : 0.25);
 	};
 
-	const replayHandler = () => {
-		setGameState(state => {
-			const newState = {
-				...state,
-				score: 0,
-				cells: initCells(state.size),
-				prevState: state,
-			};
-			saveGame(newState);
-			return newState;
+	const undoHandler = () => {
+		setGameState((state: IGameState) => {
+			if (state.prevState) {
+				return {
+					...state.prevState,
+				};
+			}
+			return state;
 		});
+	};
+
+	const replayHandler = () => {
+		setGameState(state => ({
+			...state,
+			score: 0,
+			cells: initCells(state.size),
+			prevState: state,
+		}));
 	};
 	return (
 		<>
@@ -62,6 +70,9 @@ const GameWrapper: React.FC<IGameWrapperProps> = (props) => {
 						</button>
 					</div>
 					<div className="additions__right">
+						<button onClick={undoHandler} className="replay header-item">
+							<i className="material-icons">undo</i>
+						</button>
 						<button onClick={replayHandler} className="replay header-item">
 							<i className="material-icons">replay</i>
 						</button>

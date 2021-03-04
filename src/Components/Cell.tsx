@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useRef, useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import { getValueStyle } from "../initState";
 import { CellStates, ICellProps } from "../interfaces";
 
@@ -13,14 +13,6 @@ const Cell: React.FC<ICellProps> = ({
 	const [currValue, setCurrValue] = useState(value);
 	const [highLight, setHighLight] = useState(false);
 	const cellRef = createRef<HTMLDivElement>();
-
-	// const onTransitionEnd = () => {
-	// 	if (value !== currValue) {
-	// 		console.log(value, currValue, state);
-	// 		setCurrValue(value);
-	// 		setHighLight(true)
-	// 	}
-	// };
 
 	const onAnimationEnd = () => {
 		setHighLight(false);
@@ -67,24 +59,3 @@ const Cell: React.FC<ICellProps> = ({
 };
 
 export default Cell;
-
-// button.addEventListener("click", e => {
-// 	animate(div, Math.random() * Math.PI * 2).then(() => alert("done"));
-// });
-
-// function onAnimationComplete(elem, resolve) {
-// 	elem.removeEventListener("transitionend", onAnimationComplete);
-// 	resolve();
-// }
-
-// function animate(elem, angle) {
-// 	return new Promise((resolve, reject) => {
-// 		elem.addEventListener(
-// 			"transitionend",
-// 			e => onAnimationComplete(elem, resolve),
-// 			false
-// 		);
-
-// 		elem.style.transform = "rotate(" + angle + "rad)";
-// 	});
-// }

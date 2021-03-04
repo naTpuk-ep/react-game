@@ -1,5 +1,10 @@
 import { sizes } from "./constants";
-import { CellStates, ICell, IStates, Size } from "./interfaces";
+import { CellStates, ICell, IGameState, IStates, Size } from "./interfaces";
+
+export const getPrevState = (size: Size) =>
+	JSON.parse(localStorage.getItem("2048")!).find(
+		(game: IGameState) => game.size === size
+	);
 
 export const setDifferentCell = (cells: ICell[], size: Size): ICell => {
 	const diffCell = setCell(getRandomCoord(size), getRandomCoord(size));

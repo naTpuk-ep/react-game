@@ -55,12 +55,3 @@ const Modal: React.FC<ModalProps> = ({
 };
 
 export default Modal;
-
-// 			<div className="modal-2048">
-// 	<button className="modal-btn" onclick={continue}>
-// 		Continue
-// 	</button>
-// 	<button className="modal-btn" onclick={replay}>
-// 		Replay
-// 	</button>
-// </div>

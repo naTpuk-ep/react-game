@@ -1,7 +1,6 @@
-import React, { Key, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Game from "../Game";
 import { IGameState, IGridProps, ModalType } from "../interfaces";
-import { saveGame } from "../saveGame";
 import Cell from "./Cell";
 import Modal from "./Modal";
 
@@ -16,12 +15,7 @@ const Grid: React.FC<IGridProps> = props => {
 	const [cells, setCells] = useState(gameState.cells);
 	const [canMove, setCanMove] = useState(true);
 	const { size } = gameState;
-	const game = useMemo(() => new Game(gameState, setCells, playSwipe), [
-		gameState,
-		playSwipe,
-	]);
 	const [modal, setModal] = useState<ModalType>();
-	// const [isMoving, setIsMoving] = useState(false);
 
 	const delay = async (ms: number) => {
 		return new Promise(resolve => setTimeout(resolve, ms));
@@ -40,6 +34,7 @@ const Grid: React.FC<IGridProps> = props => {
 	useEffect(() => {
 		const handler = async (event: KeyboardEvent) => {
 			if (canMove) {
+				const game = new Game(gameState);
 				setCanMove(false);
 				setCells(game.moveCells(event.key));
 				if (game.isMoving()) {
@@ -48,9 +43,7 @@ const Grid: React.FC<IGridProps> = props => {
 				await delay(100);
 				setCells(game.removeAndIncreaseCells());
 				setCells(game.populateField());
-				saveGame(game.state);
 				setGameState((state: IGameState) => ({
-					...state,
 					...game.state,
 				}));
 				if (game.finish()) {
@@ -61,7 +54,7 @@ const Grid: React.FC<IGridProps> = props => {
 		};
 		document.addEventListener("keydown", handler);
 		return () => document.removeEventListener("keydown", handler);
-	}, [canMove, game, playSwipe, setGameState]);
+	}, [canMove, gameState, playSwipe, setGameState]);
 
 	const cellSize: number = 100;
 	const border: number = cellSize / 20;
@@ -119,22 +112,3 @@ const Grid: React.FC<IGridProps> = props => {
 };
 
 export default Grid;
-
-	// const useKey = async (key: string, callBack: Function) => {
-	// 	useEffect(() => {
-	// 		const handler = async (event: KeyboardEvent) => {
-	// 			if (event.key === key) {
-	// 				console.log(game.gameState);
-	// 				await callBack(event);
-	// 				setGameState(game.gameState);
-	// 			}
-	// 		};
-	// 		document.addEventListener("keydown", handler);
-	// 		return () => document.removeEventListener("keydown", handler);
-	// 	}, [callBack, key]);
-	// };
-
-	// useKey("ArrowLeft", game.left);
-	// useKey("ArrowRight", game.right);
-	// useKey("ArrowUp", game.up);
-	// useKey("ArrowDown", game.down);
