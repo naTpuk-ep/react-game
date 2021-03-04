@@ -33,23 +33,30 @@ const Grid: React.FC<IGridProps> = props => {
 
 	useEffect(() => {
 		const handler = async (event: KeyboardEvent) => {
-			if (canMove) {
-				const game = new Game(gameState);
-				setCanMove(false);
-				setCells(game.moveCells(event.key));
-				if (game.isMoving()) {
-					playSwipe();
+			if (
+				event.key === "ArrowLeft" ||
+				event.key === "ArrowDown" ||
+				event.key === "ArrowRight" ||
+				event.key === "ArrowUp"
+			) {
+				if (canMove) {
+					const game = new Game(gameState);
+					setCanMove(false);
+					setCells(game.moveCells(event.key));
+					if (game.isMoving()) {
+						playSwipe();
+					}
+					await delay(100);
+					setCells(game.removeAndIncreaseCells());
+					setCells(game.populateField());
+					setGameState((state: IGameState) => ({
+						...game.state,
+					}));
+					if (game.finish()) {
+						setModal("gameover");
+					}
+					setCanMove(true);
 				}
-				await delay(100);
-				setCells(game.removeAndIncreaseCells());
-				setCells(game.populateField());
-				setGameState((state: IGameState) => ({
-					...game.state,
-				}));
-				if (game.finish()) {
-					setModal("gameover");
-				}
-				setCanMove(true);
 			}
 		};
 		document.addEventListener("keydown", handler);

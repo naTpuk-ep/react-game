@@ -6,10 +6,6 @@ export default class Game {
 	prevState: IGameState;
 	constructor(public state: IGameState) {
 		this.prevState = getPrevState(this.state.size);
-		this.state.prevState = {
-			...this.prevState,
-			prevState: null,
-		};;
 	}
 
 	isMoving() {
@@ -66,10 +62,13 @@ export default class Game {
 
 	populateField(): ICell[] {
 		const cells = [...this.state.cells];
-
 		if (!this.isMoving()) {
 			return cells;
 		}
+		this.state.prevState = {
+			...this.prevState,
+			prevState: null,
+		};
 		const newCells = [...cells, setDifferentCell(cells, this.state.size)];
 		this.state.cells = newCells;
 		return newCells;
@@ -95,13 +94,6 @@ export default class Game {
 
 	moveCells(key: Key): ICell[] {
 		const cells: ICell[] = [...this.state.cells];
-		if (
-			key !== "ArrowLeft" &&
-			key !== "ArrowDown" &&
-			key !== "ArrowRight" &&
-			key !== "ArrowUp"
-		)
-			return cells;
 		const matrix = this.createMatrixFromCells(cells);
 		this.rotateMatrixFromDirection(matrix, key);
 		for (let y = 0; y < this.state.size; y++) {
