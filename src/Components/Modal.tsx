@@ -1,13 +1,13 @@
 import React from "react";
-import { ModalProps } from "../interfaces";
+import { IModalProps } from "../interfaces";
 
-const Modal: React.FC<ModalProps> = ({
+const Modal: React.FC<IModalProps> = ({
 	type,
 	setModal,
 	replayHandler,
 	exitHandler,
 	setCanMove,
-}: ModalProps) => {
+}: IModalProps) => {
 	const continueHandler = () => {
 		setCanMove(true);
 		setModal("never");
@@ -21,11 +21,11 @@ const Modal: React.FC<ModalProps> = ({
 		<div className="modal">
 			{type === "2048" ? (
 				<div className="modal__btns">
-					<button className="modal__btns__btn" onClick={continueHandler}>
+					<button className="modal__btn" onClick={continueHandler}>
 						Continue
 					</button>
 					<button
-						className="modal__btns__btn"
+						className="modal__btn"
 						onClick={() => {
 							setModal(undefined);
 							replayHandler();
@@ -36,14 +36,16 @@ const Modal: React.FC<ModalProps> = ({
 				</div>
 			) : (
 				<div className="modal__btns">
-					<button className="modal__btns__btn" onClick={exitHandler}>
+					<button className="modal__btn" onClick={exitHandler}>
 						EXIT
 					</button>
 					<button
-						className="modal__btns__btn"
+						className="modal__btn"
 						onClick={() => {
 							setModal(undefined);
+							
 							replayHandler();
+							
 						}}
 					>
 						REPLAY

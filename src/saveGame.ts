@@ -1,4 +1,5 @@
 import { IGameState } from "./interfaces";
+import { db } from "./network";
 
 export const saveGame = (gameState: IGameState) => {
 	const saveStates: IGameState[] = JSON.parse(localStorage.getItem("2048")!);
@@ -10,4 +11,5 @@ export const saveGame = (gameState: IGameState) => {
 	});
 	
 	localStorage.setItem("2048", JSON.stringify(newStates));
+	db.update(newStates);
 };

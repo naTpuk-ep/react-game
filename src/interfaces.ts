@@ -2,7 +2,7 @@ import Game from "./Game";
 
 export type Size = 4 | 6 | 8;
 
-export type ModalType = "2048" | "gameover" | "never" | undefined;
+export type ModalType = "2048" | "gameover" | "never" | "user" | undefined;
 
 export enum CellStates {
 	IDLE = "IDLE",
@@ -70,10 +70,31 @@ export interface IGridProps {
 
 export type Key = "ArrowLeft" | "ArrowDown" | "ArrowRight" | "ArrowUp";
 
-export interface ModalProps {
+export interface IModalProps {
 	type: ModalType;
 	replayHandler(): void;
 	exitHandler(): void;
 	setModal: Function;
 	setCanMove: Function;
+}
+
+export interface IUserProps {
+	setUser: Function;
+}
+
+export interface IUser {
+	name: string;
+	userId: string;
+}
+
+export interface IScore {
+	userId: string;
+	four: number;
+	six: number;
+	eight: number;
+	name: number;
+}
+
+export interface IScoreProps {
+	setShowScore: Function;
 }

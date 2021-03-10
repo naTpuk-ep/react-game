@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSound from "use-sound";
 import { initCells } from "../initState";
 import { IGameState, IGameWrapperProps } from "../interfaces";
@@ -11,7 +11,9 @@ const GameWrapper: React.FC<IGameWrapperProps> = (props) => {
 	const { score, highScore } = gameState;
 	const [volume, setVolume] = useState(0.25);
 
-	saveGame(gameState);
+	useEffect(() => {
+		saveGame(gameState);
+	}, [gameState]);;
 
 	const [playSwipe] = useSound(swipeSound, { volume });
 

@@ -8,6 +8,7 @@ header{
 }
 
 .container {
+	position: relative;
 	width: 450px;
   margin: 0 auto;
 	font-family: "Clear Sans","Helvetica Neue","Arial","sans-serif";
@@ -285,30 +286,80 @@ h5{
 	bottom: 0;
 	top: 0;
 	background-color: #f2b179;
-	opacity: 0.5;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	position: fixed;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	top: 0;
-	background-color: #f2b179;
-	opacity: 0.8;
+	opacity: 0.9;
 	z-index: 3;
 	&__btns{
 		width: 450px;
 		display: flex;
 		justify-content: space-evenly;
-		&__btn{
-			background: none;
-  		font-size: 35px;
-			transition: color 0.2s ease-in-out;
-			color: #473829;
-			&:hover{
-				color: black;
-			}
 	}
+	&__btn{
+	background: none;
+	font-size: 35px;
+	transition: color 0.2s ease-in-out;
+	color: #473829;
+		&:hover{
+			color: black;
+		}
 	}
+}
+
+.user {
+  width: auto;
+  z-index: 4;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+	& input {
+		outline: none;
+		height: 30px;
+		padding: 0 10px;
+		border-radius: 3px;
+		border: none;
+	}
+	& button {
+		font-size: 20px;
+		text-transform: uppercase;
+		margin: 10px;
+	}
+}
+
+.top-score {
+	position: absolute;
+  width: 100%;
+  z-index: 4
+}
+
+.score-grid {
+	  display: grid;
+  	grid-template-columns: repeat(3, 1fr);
+}
+
+.score-column {
+	&.center {
+		border-right: 1px solid gray;
+		border-left: 1px solid gray;
+	}
+}
+
+.score-item {
+	display: flex;
+  justify-content: space-between;
+  padding: 5px 25px;
+	&.score-head {
+  	justify-content: center;
+	  font-size: 30px;
+  	color: darkred;
+	}
+}
+
+.score-btn {
+	background-color: #825e4cbf;
 }

@@ -19,7 +19,7 @@ const Grid: React.FC<IGridProps> = props => {
 
 	const delay = async (ms: number) => {
 		return new Promise(resolve => setTimeout(resolve, ms));
-	};
+	};	
 
 	useEffect(() => {
 		if (cells.some(cell => cell.value === 2048) && modal !== "never") {

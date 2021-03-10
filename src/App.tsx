@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import "./App.scss";
 import GameWrapper from "./Components/GameWrapper";
 import Menu from "./Components/Menu";
+import User from "./Components/User";
 import { sizes } from "./constants";
+import getUser from "./getUser";
 import { initState } from "./initState";
 import { IStates, Size } from "./interfaces";
 
 const App: React.FC = () => {
 	const startState: IStates = initState();
+
+	const [user, setUser] = useState(getUser());
 
 	const [play, setPlay] = useState<boolean>(false);
 	const [size, setSize] = useState<Size>(sizes[0]);
@@ -50,6 +54,7 @@ const App: React.FC = () => {
 					size={size}
 				/>
 			)}
+			{user ? null : <User setUser={setUser} />}
 		</div>
 	);
 };
