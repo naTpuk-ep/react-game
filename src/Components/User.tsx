@@ -9,27 +9,36 @@ const User: React.FC<IUserProps> = ({ setUser }: IUserProps) => {
 	const onInput = (event: FormEvent<HTMLInputElement>) => {
 		const inputValue = event.currentTarget.value;
 		setValue(inputValue);
+		if (error !== "") {
+			setError("");
+		}
 	};
 
 	const onSubmit = async (event: FormEvent) => {
 		event.preventDefault();
-		const res = await db.create(value);
-		if (res.statusCode === 404) {
-			setError(res.reason);
-			return;
-		}
-		const { name, userId } = res;
-		setUser({
-			name,
-			userId,
-		});
-		localStorage.setItem(
-			"2048-user",
-			JSON.stringify({
+		try {
+			const res = await db.create(value);
+			if (res.statusCode === 404) {
+				setError(res.reason);
+				return;
+			}
+			const { name, userId } = res;
+			setUser({
 				name,
 				userId,
-			})
-		);
+			});
+			localStorage.setItem(
+				"2048-user",
+				JSON.stringify({
+					name,
+					userId,
+				})
+			);
+		} catch (e) {
+			if (e instanceof Error) {
+				console.warn(e.message);
+			}
+		}
 	};
 	return (
 		<>
@@ -41,10 +50,10 @@ const User: React.FC<IUserProps> = ({ setUser }: IUserProps) => {
 					onInput={onInput}
 					value={value}
 				/>
+				<span>{error}</span>
 				<button type="submit" className="modal__btn">
 					Confirm
 				</button>
-				<span>{error}</span>
 			</form>
 		</>
 	);

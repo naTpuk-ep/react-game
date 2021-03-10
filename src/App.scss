@@ -363,3 +363,22 @@ h5{
 .score-btn {
 	background-color: #825e4cbf;
 }
+
+.user {
+	& span {
+		color: #cf1b1b;
+		font-size: 12px;
+		min-height: 15px;
+		padding-top: 3px;
+	}
+	& button {
+		text-transform: uppercase;
+		margin: 8px;
+		color: #287c17;
+		font-size: 18px;
+		&:hover {
+			color: #40a02d;
+		}
+
+	}
+}

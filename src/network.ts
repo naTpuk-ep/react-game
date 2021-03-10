@@ -2,7 +2,7 @@ import axios from "axios";
 import { IStates } from "./interfaces";
 
 export const db = {
-	url: "http://react-game-be.herokuapp.com/",
+	url: "https://react-game-be.herokuapp.com/",
 
 	async getScore() {
 		const res = await axios.get(this.url);
