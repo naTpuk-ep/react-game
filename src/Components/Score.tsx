@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import getUser from "../getUser";
 import { IScore, IScoreProps } from "../interfaces";
 import { db } from "../network";
 
@@ -34,6 +35,14 @@ const Score: React.FC<IScoreProps> = ({ setShowScore }: IScoreProps) => {
 			value: item.eight,
 		}))
 		.sort((a: any, b: any) => b.value - a.value);
+	
+	
+	const currentUser = getUser();
+	const getItemClassName = (name: string) => {
+		return `score-item ${
+			currentUser && name === currentUser.name ? "current" : ""
+		}`;
+	};
 
 	return (
 		<>
@@ -49,7 +58,7 @@ const Score: React.FC<IScoreProps> = ({ setShowScore }: IScoreProps) => {
 						<div className="score-item score-head">4x4</div>
 						{score4.map((item, i) =>
 							item.value ? (
-								<div key={i} className="score-item">
+								<div key={i} className={getItemClassName(item.name)}>
 									<span>{item.value}</span>
 									<span>{item.name}</span>
 								</div>
@@ -60,7 +69,7 @@ const Score: React.FC<IScoreProps> = ({ setShowScore }: IScoreProps) => {
 						<div className="score-item score-head">6x6</div>
 						{score6.map((item, i) =>
 							item.value ? (
-								<div key={i} className="score-item">
+								<div key={i} className={getItemClassName(item.name)}>
 									<span>{item.value}</span>
 									<span>{item.name}</span>
 								</div>
@@ -71,7 +80,7 @@ const Score: React.FC<IScoreProps> = ({ setShowScore }: IScoreProps) => {
 						<div className="score-item score-head">8x8</div>
 						{score8.map((item, i) =>
 							item.value ? (
-								<div key={i} className="score-item">
+								<div key={i} className={getItemClassName(item.name)}>
 									<span>{item.value}</span>
 									<span>{item.name}</span>
 								</div>
