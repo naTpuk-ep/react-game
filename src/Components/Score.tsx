@@ -7,7 +7,9 @@ const Score: React.FC<IScoreProps> = ({ setShowScore }: IScoreProps) => {
 	const [scoreList, setScoreList] = useState([]);
 	const getScore = async () => {
 		const score = await db.getScore();
-		setScoreList(score);
+    if (score) {
+      setScoreList(score);
+    }
 		return score;
 	};
 

@@ -5,9 +5,13 @@ export const db = {
 	url: "https://react-game-be.herokuapp.com/",
 
 	async getScore() {
-		const res = await axios.get(this.url);
-		const data = res.data;
-		return data;
+		try {
+      const res = await axios.get(this.url);
+      const data = res.data;
+      return data;
+    } catch (e) {
+      return null;
+    }
 	},
 
 	async create(name: string) {
@@ -17,13 +21,15 @@ export const db = {
 
 	async update(gameStates: IStates) {
 		const userId = JSON.parse(localStorage.getItem("2048-user")!).userId;
-		const body = {
-			userId,
-			four: gameStates[0].highScore,
-			six: gameStates[1].highScore,
-			eight: gameStates[2].highScore,
-		};
-		const res = await axios.put(this.url, body);
-		return res.data;
+    if (userId) {
+      const body = {
+        userId,
+        four: gameStates[0].highScore,
+        six: gameStates[1].highScore,
+        eight: gameStates[2].highScore,
+      };
+      const res = await axios.put(this.url, body);
+      return res.data;
+    }
 	},
 };

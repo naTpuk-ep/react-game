@@ -39,9 +39,16 @@ const User: React.FC<IUserProps> = ({ setUser }: IUserProps) => {
 				})
 			);
 		} catch (e) {
-			if (e instanceof Error) {
-				console.warn(e.message);
-			}
+			console.error(e);
+      setUser({
+        name: value
+      });
+      localStorage.setItem(
+        "2048-user",
+        JSON.stringify({
+          name: value,
+        })
+      );
 			setLoading(false);
 		}
 	};
@@ -63,7 +70,7 @@ const User: React.FC<IUserProps> = ({ setUser }: IUserProps) => {
 								<span>{error}</span>
 								<button type="submit" className="modal__btn">
 									Confirm
-							</button>
+							  </button>
 							</>
 						)
 				}
